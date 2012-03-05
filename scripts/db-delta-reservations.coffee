@@ -20,8 +20,8 @@ class DBDeltas
   setCurrent: (current) ->
     @current = (Number) current
 
-  set: (dbdelta, owner, reason) ->
-    @robot.brain.data.dbdeltas[dbdelta] =
+  set: (deltanum, owner, reason) ->
+    @robot.brain.data.dbdeltas[deltanum] =
       reason: reason
       owner: owner
 
