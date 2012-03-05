@@ -5,7 +5,7 @@
 # {reservations} give me a dbdelta for <reason> - Reserves next available DBDelta
 # {reservations} give up dbdelta <dbdelta> - Sets DBDelta as available
 # {reservations} list dbdeltas - Lists available DBDeltas
-# {reservations} set next dbdelta to <dbdelta> - Sets the next available DBDelta
+# {reservations} set current dbdelta to <dbdelta> - Sets the current DBDelta
 class DBDeltas
   constructor: (@robot) ->
     @current = 0
@@ -37,7 +37,7 @@ module.exports = (robot) ->
   dbdeltas = new  DBDeltas robot
 
   # Set current
-  robot.respond /set next dbdelta to ([0-9]+)/i, (msg) ->
+  robot.respond /set current dbdelta to ([0-9]+)/i, (msg) ->
     dbdeltas.setCurrent msg.match[1]
     msg.send "Set the current DBDelta to #{msg.match[1]}"
 
