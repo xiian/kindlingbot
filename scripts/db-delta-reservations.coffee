@@ -18,6 +18,14 @@ class DBDeltas
   list: ->
     return @robot.brain.data.dbdeltas or {}
 
+  getNext: ->
+    next = @current + 1
+    next++ while next of @robot.brain.data.dbdeltas
+    return next
+
+  getCurrent: ->
+    return @current
+
   setCurrent: (current) ->
     @current = (Number) current
 
@@ -31,9 +39,9 @@ class DBDeltas
     @set deltanum, owner, reason
 
   reserve: (reason, owner) ->
-    @current++
-    @set @current, owner, reason
-    return @current
+    deltanum = @getNext()
+    @set deltanum, owner, reason
+    return deltanum
 
   release: (deltanum) ->
     deltanum = (Number) deltanum
@@ -98,7 +106,7 @@ module.exports = (robot) ->
       message.push "No DBDeltas reserved"
 
     # Put out the next one
-    next = dbdeltas.current + 1
+    next = dbdeltas.getNext()
     message.push andbut + " the next one up for grabs is \##{next}"
 
     msg.send message.join(" ")
