@@ -3,6 +3,7 @@
 # These commands are grabbed from comment blocks at the top of each file.
 #
 # {reservations} give me a dbdelta for <reason> - Reserves next available DBDelta
+# {reservations} give me dbdelta #<dbdelta> for <reason> - Reserves specific DBDelta
 # {reservations} give up dbdelta <dbdelta> - Sets DBDelta as available
 # {reservations} list dbdeltas - Lists available DBDeltas
 # {reservations} set current dbdelta to <dbdelta> - Sets the current DBDelta
@@ -65,6 +66,14 @@ module.exports = (robot) ->
     dbdelta = dbdeltas.reserve reason, owner
     msg.send "#{owner.name} has reserved \##{dbdelta} for #{reason}"
     msg.finish()
+
+  # Reserve specific
+  robot.respond /give me dbdelta (#)?([0-9]+) for (.+)/i, (msg) ->
+    reason  = msg.match[3]
+    owner   = msg.message.user
+    dbdelta = msg.match[2]
+    dbdeltas.set dbdelta, owner, reason
+    msg.send "#{owner.name} has reserved \##{dbdelta} for #{reason}"
 
   # Bad reserve
   robot.respond /give me a dbdelta/i, (msg) ->
