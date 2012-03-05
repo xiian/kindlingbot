@@ -11,6 +11,9 @@ class DBDeltas
     @current = 0
     @robot.brain.data.dbdeltas = {}
 
+  has: (deltanum) ->
+    return (Number) deltanum of @robot.brain.data.dbdeltas
+
   list: ->
     return @robot.brain.data.dbdeltas or {}
 
@@ -21,6 +24,10 @@ class DBDeltas
     @robot.brain.data.dbdeltas[dbdelta] =
       reason: reason
       owner: owner
+
+  setReason: (deltanum, reason) ->
+    owner = @robot.brain.data.dbdeltas[deltanum].owner
+    @set deltanum, owner, reason
 
   reserve: (reason, owner) ->
     @current++
@@ -40,6 +47,16 @@ module.exports = (robot) ->
   robot.respond /set current dbdelta to ([0-9]+)/i, (msg) ->
     dbdeltas.setCurrent msg.match[1]
     msg.send "Set the current DBDelta to #{msg.match[1]}"
+
+  # Change reason
+  robot.respond /change reason for dbdelta ([0-9]+) to (.*)/i, (msg) ->
+    dbdelta = msg.match[1]
+    reason  = msg.match[2]
+    if dbdeltas.has(dbdelta)
+      dbdeltas.setReason dbdelta, reason
+      msg.send "Changed reason for #{dbdelta} to #{reason}"
+    else
+      msg.send "DBDelta \##{dbdelta} does not exist"
 
   # Reserve
   robot.respond /give me a dbdelta .*for (.+)/i, (msg) ->
