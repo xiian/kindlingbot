@@ -9,7 +9,7 @@
 # {reservations} set current dbdelta to <dbdelta> - Sets the current DBDelta
 class DBDeltas
   constructor: (@robot) ->
-    @current = 0
+    @robot.brain.data.dbdelta_current = 0
     @robot.brain.data.dbdeltas = {}
 
   has: (deltanum) ->
@@ -19,15 +19,15 @@ class DBDeltas
     return @robot.brain.data.dbdeltas or {}
 
   getNext: ->
-    next = @current + 1
+    next = @robot.brain.data.dbdelta_current + 1
     next++ while next of @robot.brain.data.dbdeltas
     return next
 
   getCurrent: ->
-    return @current
+    return @robot.brain.data.dbdelta_current
 
   setCurrent: (current) ->
-    @current = (Number) current
+    @robot.brain.data.dbdelta_current = (Number) current
 
   set: (deltanum, owner, reason) ->
     @robot.brain.data.dbdeltas[deltanum] =
@@ -46,8 +46,8 @@ class DBDeltas
   release: (deltanum) ->
     deltanum = (Number) deltanum
     delete @robot.brain.data.dbdeltas[deltanum]
-    if deltanum is @current
-      @current--
+    if deltanum is @robot.brain.data.dbdelta_current
+      @robot.brain.data.dbdelta_current--
 
 module.exports = (robot) ->
   dbdeltas = new  DBDeltas robot
