@@ -34,6 +34,12 @@ class DBDeltas
       reason: reason
       owner: owner
 
+  reassign: (original, newbie) ->
+    if !@robot.brain.data.dbdeltas[original]
+      return
+    @robot.brain.data.dbdeltas[newbie] = @robot.brain.data.dbdeltas[original]
+    delete @robot.brain.data.dbdeltas[original]
+
   setReason: (deltanum, reason) ->
     owner = @robot.brain.data.dbdeltas[deltanum].owner
     @set deltanum, owner, reason
@@ -48,6 +54,10 @@ class DBDeltas
     delete @robot.brain.data.dbdeltas[deltanum]
     if deltanum is @robot.brain.data.dbdelta_current
       @robot.brain.data.dbdelta_current--
+
+  shiftTo: (start, first, end) ->
+    offset = start - first
+    @reassign x, (offset) + x for x in [first..end]
 
 module.exports = (robot) ->
   dbdeltas = new  DBDeltas robot
@@ -110,3 +120,12 @@ module.exports = (robot) ->
     message.push andbut + " the next one up for grabs is \##{next}"
 
     msg.send message.join(" ")
+
+  # Shift
+  robot.respond /shift dbdeltas ([0-9]+)-([0-9]+) to start at ([0-9]+)/i, (msg) ->
+    first = (Number) msg.match[1]
+    end   = (Number) msg.match[2]
+    start = (Number) msg.match[3]
+    dbdeltas.shiftTo start, first, end
+    msg.send "Shifted DBDeltas #{first} through #{end} to start at \##{start}"
+
