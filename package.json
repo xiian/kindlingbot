@@ -1,6 +1,6 @@
 {
   "name":        "hosted-hubot",
-  "version":     "0.2.0",
+  "version":     "2.3.2",
   "author":      "GitHub Inc.",
   "keywords":    "github hubot campfire bot",
   "description": "A simple helpful Robot for your Company",
@@ -11,7 +11,7 @@
 
   "repository" : {
     "type" : "git",
-    "url" : "http://github.com/github/hubot.git"
+    "url" : "https://github.com/github/hubot.git"
   },
 
   "dependencies": {
@@ -20,6 +20,10 @@
     "optparse": "1.0.3",
     "hubot-gtalk": ">=0.0.1",
     "date-utils": ">=1.2.5"
+  },
+  "engines": {
+    "node": "0.6.20",
+    "npm":  "1.0.106"
   }
 }
 
