@@ -109,8 +109,11 @@ module.exports = (robot) ->
     andbut = "and"
     if Object.keys(deltas).length > 0
       message.push "Here is a list of all reservations:\n"
+      deltamsgs = []
       for num, delta of deltas
-        message.push "\t* #{delta.owner.name} has DBDelta \##{num} for #{delta.reason}\n"
+        deltamsgs.push "\t* #{delta.owner.name} has DBDelta \##{num} for #{delta.reason}\n"
+      deltamsgs.reverse()
+      message = message.concat deltamsgs
     else
       andbut = "but"
       message.push "No DBDeltas reserved"
