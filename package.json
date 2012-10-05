@@ -15,7 +15,7 @@
   },
 
   "dependencies": {
-    "hubot": "2.3.2",
+    "hubot": ">=2.3.2",
     "hubot-scripts": ">=2.0.4",
     "optparse": "1.0.3",
     "hubot-gtalk": ">=0.0.1",
