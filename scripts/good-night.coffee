@@ -1,6 +1,17 @@
-# GOOD Night
+# Description:
+#   GOOD Night
 #
-# good night
+# Dependencies:
+#   None
+#
+# Configuration:
+#   None
+#
+# Commands:
+#   good night
+#
+# Author:
+#   noahhendrix
 
 ways_to_say_good_night = [
   "Good night, baby.",
@@ -25,11 +36,6 @@ ways_to_say_good_night = [
   "Avada Kedavra"
 ]
 
-# Make sure that hubot says good night
-#
-# good night - Make sure hubot replies
 module.exports = (robot) ->
-  robot.respond /(good night|bye|nighty night)/i, (msg) ->
-    randomNumber = Math.ceil Math.random() * ways_to_say_good_night.length
-    msg.send ways_to_say_good_night[randomNumber]
-
+  robot.hear /(good night|bye|nighty night)/i, (msg) ->
+    msg.send msg.random ways_to_say_good_night

@@ -1,5 +1,17 @@
-# Display a hyperbole and a half image if anyone says "like an adult"
+# Description:
+#   None
 #
+# Dependencies:
+#   None
+#
+# Configuration:
+#   None
+#
+# Commands:
+#   like an adult - Display a hyperbole and a half image
+#
+# Author:
+#   atmos
 
 images = [
   "http://1.bp.blogspot.com/_D_Z-D2tzi14/TBpOnhVqyAI/AAAAAAAADFU/8tfM4E_Z4pU/s400/responsibility12(alternate).png",

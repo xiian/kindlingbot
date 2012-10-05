@@ -1,38 +1,38 @@
-# it was based on github-issues.coffee script
+# Description:
+#   None
+#
+# Dependencies:
+#   "date-utils": ">=1.2.5"
+#   "githubot": "0.2.0"
 # 
-# add "date-utils":">=1.2.5" in the hubot-scripts.json file
+# Configuration:
+#   HUBOT_GITHUB_TOKEN
+#   HUBOT_GITHUB_USER
 #
-# You need to set the following variables:
-#   HUBOT_GITHUB_TOKEN ="<oauth token>"
+# Commands:
+#   hubot repo show <repo> - shows activity of repository
 #
-# repo show <repo> - shows activity of repository
-#
+# Author:
+#   vquaiato
 
 require('date-utils')
 
 module.exports = (robot) ->
+  github = require("githubot")(robot)
   robot.respond /repo show (.*)$/i, (msg) ->
-    repo = msg.match[1].toLowerCase()
-    repo = "#{process.env.HUBOT_GITHUB_USER}/#{repo}" unless repo.indexOf("/") > -1
-    oauth_token = process.env.HUBOT_GITHUB_TOKEN
+    repo = github.qualified_repo msg.match[1]
     url = "https://api.github.com/repos/#{repo}/commits"
 
-    msg.http(url)
-      .headers(Authorization: "token #{oauth_token}", Accept: "application/json")
-      .get() (err, res, body) ->
-        if err
-          msg.send "GitHub says: #{err}"
-          return
-        commits = JSON.parse(body)
-        if commits.message
-          msg.send "Achievement unlocked: [NEEDLE IN A HAYSTACK] repository #{commits.message}!"
-        else if commits.length == 0
-            msg.send "Achievement unlocked: [LIKE A BOSS] no commits found!"
-        else
-          msg.send "http://github.com/#{repo}"
-          send = 5
-          for c in commits
-            if send
-              d = new Date(Date.parse(c.commit.committer.date)).toFormat("DD/MM HH24:MI")
-              msg.send "[#{d} -> #{c.commit.committer.name}] #{c.commit.message}" 
-              send -= 1
+    github.get url, (commits) ->
+      if commits.message
+        msg.send "Achievement unlocked: [NEEDLE IN A HAYSTACK] repository #{commits.message}!"
+      else if commits.length == 0
+          msg.send "Achievement unlocked: [LIKE A BOSS] no commits found!"
+      else
+        msg.send "http://github.com/#{repo}"
+        send = 5
+        for c in commits
+          if send
+            d = new Date(Date.parse(c.commit.committer.date)).toFormat("DD/MM HH24:MI")
+            msg.send "[#{d} -> #{c.commit.committer.name}] #{c.commit.message}"
+            send -= 1
